@@ -1,11 +1,56 @@
 #include <iostream>
+#include <string>
 #include <bitset>
-#include <sstream>
+#include <vector>
 
 using namespace std;
 
+// Function to convert binary IP to decimal
+string binaryToDecimal(const string& binaryIP) {
+    string decimalIP;
+    for (int i = 0; i < 32; i += 8) {
+        bitset<8> octet(binaryIP.substr(i, 8));
+        decimalIP += to_string(octet.to_ulong()) + ".";
+    }
+    // Remove the trailing dot
+    decimalIP.pop_back();
+    return decimalIP;
+}
+
+// Function to identify the class of the IP address
+void identifyClass(const string& decimalIP) {
+    // Split the decimal IP address into octets
+    size_t pos = 0;
+    vector<int> octets;
+    for (int i = 0; i < 4; ++i) {
+        try {
+            size_t nextPos;
+            octets.push_back(stoi(decimalIP.substr(pos), &nextPos));
+            pos += nextPos + 1;  // Move past the dot
+        } catch (const invalid_argument& e) {
+            cerr << "Invalid input. Please enter a valid decimal IP address." << endl;
+            exit(1);
+        }
+    }
+
+    // Check the class of the IP address based on the first octet
+    if (octets[0] >= 1 && octets[0] <= 126) {
+        cout << "Class A IP address" << endl;
+    } else if (octets[0] >= 128 && octets[0] <= 191) {
+        cout << "Class B IP address" << endl;
+    } else if (octets[0] >= 192 && octets[0] <= 223) {
+        cout << "Class C IP address" << endl;
+    } else if (octets[0] >= 224 && octets[0] <= 239) {
+        cout << "Class D IP address (Multicast)" << endl;
+    } else if (octets[0] >= 240 && octets[0] <= 255) {
+        cout << "Class E IP address (Reserved)" << endl;
+    } else {
+        cout << "Invalid IP address" << endl;
+    }
+}
+
 int main() {
-    // Input IP address in binary format (32 bits)
+    // Input IP address in binary format
     string binaryIP;
 
     cout << "Enter the IP address in binary (32 bits): ";
@@ -13,21 +58,17 @@ int main() {
 
     // Ensure the binary IP address is a valid 32-bit binary string
     if (binaryIP.length() != 32 || binaryIP.find_first_not_of("01") != string::npos) {
-        cout << "Invalid binary IP address. Please enter a valid 32-bit binary string." << endl;
+        cerr << "Invalid binary IP address. Please enter a valid 32-bit binary string." << endl;
         return 1;
     }
 
-    // Convert binary to decimal for each octet
-    string decimalIP;
-    for (int i = 0; i < 32; i += 8) {
-        bitset<8> octet(binaryIP.substr(i, 8));
-        decimalIP += to_string(octet.to_ulong()) + ".";
-    }
-
-    // Remove the trailing dot
-    decimalIP.pop_back();
-
+    // Convert binary to decimal
+    string decimalIP = binaryToDecimal(binaryIP);
     cout << "IP address in decimal format: " << decimalIP << endl;
+
+    // Identify the class of the IP address
+    identifyClass(decimalIP);
 
     return 0;
 }
+

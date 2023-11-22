@@ -1,0 +1,43 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main() {
+    // Input IP address in decimal format
+    string decimalIP;
+    
+    cout << "Enter the IP address in decimal format (e.g., 192.168.1.1): ";
+    cin >> decimalIP;
+
+    // Split the decimal IP address into octets
+    size_t pos = 0;
+    int octet;
+    int firstOctet;
+
+    try {
+        // Convert the first octet to an integer
+        octet = stoi(decimalIP, &pos);
+        firstOctet = octet;
+    } catch (const invalid_argument& e) {
+        cerr << "Invalid input. Please enter a valid decimal IP address." << endl;
+        return 1;
+    }
+
+    // Check the class of the IP address based on the first octet
+    if (firstOctet >= 1 && firstOctet <= 126) {
+        cout << "Class A IP address" << endl;
+    } else if (firstOctet >= 128 && firstOctet <= 191) {
+        cout << "Class B IP address" << endl;
+    } else if (firstOctet >= 192 && firstOctet <= 223) {
+        cout << "Class C IP address" << endl;
+    } else if (firstOctet >= 224 && firstOctet <= 239) {
+        cout << "Class D IP address (Multicast)" << endl;
+    } else if (firstOctet >= 240 && firstOctet <= 255) {
+        cout << "Class E IP address (Reserved)" << endl;
+    } else {
+        cout << "Invalid IP address" << endl;
+    }
+
+    return 0;
+}

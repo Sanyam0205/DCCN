@@ -1,0 +1,38 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+int main()
+{
+    srand(time(0));
+    int nodes, packets, rate;
+    cout <<"Enter the no of nodes: ";
+    cin >> nodes;
+    cout <<"Enter no. of Packets: ";
+    cin>> packets;
+    cout <<"Enter rate (0 for idle, 1 for transmission): ";
+    cin >> rate;
+    bool channel= false;
+    int collisions = 0;
+    int Packets_received=0;
+
+    for(int i=0; i < packets; i++)
+    {
+        int rand_no = rand()% 2;
+        if(rand_no ==0)
+        if (channel)
+        {
+            collisions++;
+        }
+        else
+        {
+            Packets_received++;
+        }
+        
+    channel = (rand_no == rate);
+    }
+    cout<<" No. of collisions: " << collisions <<endl;
+    cout <<"No. of parkets received:"<< Packets_received<<endl;
+    return 0;
+}

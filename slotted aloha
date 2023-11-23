@@ -1,0 +1,46 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+int main()
+{
+    int nodes, packets, rate;
+    cout << "Enter no. of nodes: ";
+    cin>> nodes;
+    cout << " Enter no. of packets: ";
+    cin >> packets;
+    cout << "Enter rate:";
+    cin>> rate;
+    bool channel = false;
+    int collision = 0;
+    int Packet_received = 0;
+    srand (time(0));
+    
+    for(int i=0; i< packets; i++)
+    {
+        int rand_no = rand()%2;
+        if (rand_no != 0)
+        {
+            if (channel)
+            {
+                collision++;    
+            }
+            else
+            {
+                Packet_received ++;
+            }
+        }
+        channel = rand_no;
+        cout << "Press enter to continue the Simulation (or type exit' to exit): ";
+        string userInput;
+        getline (cin, userInput);
+        if (userInput == "exit")
+        {
+            break;
+        }
+    }
+    cout << "No. of collisions: "<< collision << endl; 
+    cout << "No. of packets :" << Packet_received << endl;
+    return 0;
+}
